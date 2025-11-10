@@ -37,7 +37,8 @@ if __name__ == "__main__":
     grille.ajoute(b1)
     grille.ajoute(b2)
 
-    print(grille)
+    print(grille) # Affiche la grille complète (pour le débogage) deletez cette ligne si vous ne voulez pas voir les bateaux
+   
     print("=== Bataille navale ===")
     print("Grille: 8 lignes x 10 colonnes. Entrez les coordonnées (ligne, colonne).")
     print("Tapez Ctrl+C pour quitter.")
