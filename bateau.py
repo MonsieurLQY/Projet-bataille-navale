@@ -29,12 +29,12 @@ class Bateau:
                 positions.append((self.ligne, self.colonne + i))
         return positions
 
-    def coule(self, grille):
+    def coule(self, grille,touche="x"):
         """Vérifie si le bateau est coulé sur la grille donnée.
         规则：船的每个格子都被标记为 'x' 才算沉没。
         """
         for (x, y) in self.positions:
             idx = x * grille.colonnes + y
-            if grille.matrice[idx] != 'x':
+            if grille.matrice[idx] != touche:
                 return False
         return True

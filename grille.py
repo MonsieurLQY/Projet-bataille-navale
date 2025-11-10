@@ -17,8 +17,9 @@ class Grille:
             index = ligne * self.colonnes + colonne
             contenu = self.matrice[index]
             if contenu == self.vide:
-                print("Plouf! Tir dans l'eau.")
-            elif contenu == touche:
+                #print("Plouf! Tir dans l'eau.")
+                self.matrice[index] = 'x'  # 'x' 表示已射击过
+            elif contenu == 'x':
                 # 已经被标记过（可能是 'x' 或其他自定义 touche）
                 print("Déjà tiré ici.")
             else:
@@ -37,6 +38,19 @@ class Grille:
             lignes.append("".join(self.matrice[debut:fin]))
         return "\n".join(lignes)
 
+    def afficher(self, touche="💣"):
+        """Affiche la grille en ne montrant que '~', 'x' et le caractère touche, 
+        tous les autres caractères sont remplacés par '~'"""
+        lignes = []
+        for i in range(self.lignes):
+            debut = i * self.colonnes
+            fin = debut + self.colonnes
+            # Create a display version where only '~', 'x' and touche are shown
+            ligne_affichee = ['x' if c == 'x' else (touche if c == touche else '~') for c in self.matrice[debut:fin]]
+            lignes.append("".join(ligne_affichee))
+        print("\n".join(lignes))
+       
+    
     def ajoute(self, bateau):
         """Place un bateau sur la grille en remplaçant par '⛵' aux positions du bateau.
         Ne fait rien (retourne False) si le bateau ne rentre pas entièrement dans la grille.
