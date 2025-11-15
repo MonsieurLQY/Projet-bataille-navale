@@ -4,6 +4,7 @@ from bateau_4types import PorteAvion, Croiseur, Torpilleur, SousMarin
 from story_bateau import chevauchent
 # --------------------
 # 将航空母舰和巡洋舰随机放置在网格上，确保不重叠
+# Placer aléatoirement le Porte-Avion et le Croiseur sur la grille, en veillant à ce qu'ils ne se chevauchent pas
 # --------------------
 def creer_bateaux(lignes=8, colonnes=10):
     
@@ -44,6 +45,7 @@ if __name__ == "__main__":
     print("Tapez Ctrl+C pour quitter.")
     
     # 为了在船沉没后显示其原始图标，在主循环里维护已沉没船的集合并使用自定义显示函数
+    # Pour afficher les icônes d'origine des navires après leur naufrage, maintenir un ensemble de navires coulés et utiliser une fonction d'affichage personnalisée dans la boucle principale
     bateaux = [b1, b2]
     pos_to_bateau = {}
     for b in bateaux:
@@ -51,7 +53,7 @@ if __name__ == "__main__":
             pos_to_bateau[p] = b
 
     bateaux_coules = set()
-    nombre_coups = 0  # 计数总击次
+    nombre_coups = 0  # 计数总击次 / Compter le nombre total de tirs
 
     def afficher_personnalisee(grille, pos_to_bateau, bateaux_coules, touche="💣"):
         """按要求显示：
@@ -59,6 +61,12 @@ if __name__ == "__main__":
         - 命中标记使用 touche
         - 对于已沉没的船，显示其原始图标
         - 其他格子显示 '~'
+        
+        Affichage selon les exigences :
+        - Les positions touchées mais manquées affichent 'x'
+        - Les coups qui ont touché un navire affichent le caractère touche
+        - Pour les navires coulés, afficher leur icône d'origine
+        - Les autres cellules affichent '~'
         """
         lignes = []
         for i in range(grille.lignes):
@@ -93,19 +101,22 @@ if __name__ == "__main__":
                 continue
 
             grille.tirer(x, y, touche=touche)
-            nombre_coups += 1  # 每次击中后累加计数
+            nombre_coups += 1  # 每次击中后累加计数 / Incrémenter le compteur après chaque tir
 
             # 检测船只是否刚刚被击沉；如果被击沉，将其标记为已沉没并在格子上显示原始图标
+            # Vérifier si un navire vient d'être coulé; s'il l'est, le marquer comme coulé et afficher son icône d'origine sur la grille
             for b in bateaux:
                 if b not in bateaux_coules and b.coule(grille, touche=touche):
                     bateaux_coules.add(b)
                     # 将船的所有格子写回为船的图标，便于后续（和调试）观察
+                    # Réécrire toutes les cellules du navire avec son icône d'origine pour une observation ultérieure (et un débogage)
                     for (xx, yy) in b.positions:
                         if 0 <= xx < grille.lignes and 0 <= yy < grille.colonnes:
                             grille.matrice[xx * grille.colonnes + yy] = b.marque
                     print(f"Le bateau {b.marque} est coulé!")
 
             # 检测游戏是否结束（使用已记录的沉没集合）
+            # Vérifier si le jeu est terminé (en utilisant l'ensemble des navires coulés enregistrés)
             if len(bateaux_coules) == len(bateaux):
                 afficher_personnalisee(grille, pos_to_bateau, bateaux_coules, touche=touche)
                 print("Tous les bateaux sont coulés !")
